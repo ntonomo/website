@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>the wall</title>
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #ffa667;
+
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: bold;
+      font-style: italic;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .wall {
+      display: grid;
+      grid-template-columns: repeat(7, 150px);
+      grid-template-rows: repeat(3, 150px);
+      gap: 30px;
+    }
+
+    .wall img.album {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mrrow {
+      grid-column: 6 / 8;
+      grid-row: 3;
+
+      display: flex;
+      justify-content: flex-start; /* left */
+      align-items: flex-end;       /* bottom */
+    }
+
+    .mrrow img {
+      height: 90px;
+      width: auto;
+      object-fit: contain;
+    }
+
+.back-button {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+
+  text-decoration: none;
+  color: white;
+
+font-size: 30px;
+}
+
+  </style>
+</head>
+
+<a href="#" onclick="history.back()" class="back-button"><-- back</a>
+
+<body>
+
+  <div class="wall">
+
+    <a href="https://www.discogs.com/release/9625319-Sade-Promise"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/f/f7/Sade_-_Promise.png"></a>
+    <a href="https://www.discogs.com/release/348348-Pase-Rock-L-Universe-Messing-With-My-Head"><img class="album" src="https://i.discogs.com/rRjxqwh6mN0zuN2257iTpmFu63Yex1u664CR_673ugk/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM0ODM0/OC0xNTg4MDM5NDg0/LTU1NjQucG5n.jpeg"></a>
+    <a href="https://www.discogs.com/release/2784073-Dobie-Gray-Loves-Talkin"><img class="album" src="https://i.discogs.com/QBji7oQb5xZmGQeV7m60Oq8PfzCqF_6VUc3Jy9Lu4FU/rs:fit/g:sm/q:90/h:600/w:579/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI3ODQw/NzMtMTMzNjg0MTA2/OC0yMjE1LmpwZWc.jpeg"></a>
+    <a href="https://www.discogs.com/release/619872-J-Dilla-Donuts"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/4/43/Jdilla_donuts_altLPcover.jpg"></a>
+    <a href="https://www.discogs.com/release/1466295-Leslie-Drayton-Fun-Innuendos"><img class="album" src="https://i.discogs.com/_z0klrxIlgADQPBNcvEeC6_HUbCuHO567qnI-3XwfnI/rs:fit/g:sm/q:90/h:571/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE0NjYy/OTUtMTQyMjIwNjU4/OC05MTA0LmpwZWc.jpeg"></a>
+    <a href="https://www.discogs.com/release/33052227-Kendrick-Lamar-GNX"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/9/93/Kendrick_Lamar_-_GNX.png"></a>
+    <a href="https://www.discogs.com/release/1049399-Pat-Benatar-Tropico"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/7/7e/Benatrop.jpg"></a>
+
+    <a href="https://www.discogs.com/release/35536342-Hiroshi-Suzuki-2-%E9%88%B4%E6%9C%A8%E5%BC%98-Cat-%E3%82%AD%E3%83%A3%E3%83%83%E3%83%88"><img class="album" src="https://i.discogs.com/mYt_jFmpjEgpgd4WlttMdOtZdreYPKyCK4izzR58Bs0/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM1NTM2/MzQyLTE3NjIwMDky/OTYtMTgyMS5qcGVn.jpeg"></a>
+    <a href="https://www.discogs.com/release/229372-Arthur-Verocai-Arthur-Verocai"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/e/eb/Arthur_Verocai_%28album%29.jpg"></a>
+    <a href="https://www.discogs.com/release/13382295-Joji-Ballads-1"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/6/6a/Joji_%E2%80%93_Ballads_1.png"></a>
+    <a href="https://www.discogs.com/release/88106-4-Hero-Two-Pages"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/5/52/Two_Pages_1998_4hero_Album_Cover.jpg"></a>
+    <a href="https://www.discogs.com/release/13469-The-Architex-The-Continuation"><img class="album" src="https://i.discogs.com/y-HbisGsVSDqSF-HgV00kBj6a_cXfuXodafniZH2F10/rs:fit/g:sm/q:90/h:600/w:594/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEzNDY5/LTE3NDE3Njg2ODEt/NTIyNC5qcGVn.jpeg"></a>
+    <a href="https://www.discogs.com/release/3433495-MF-Doom-MMFood"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/8/8a/Mmfood.jpg"></a>
+    <a href="https://www.discogs.com/release/36974856-Thundercat-Distracted"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/a/ad/Distracted_%28Thundercat_album%29.jpg"></a>
+
+    <a href="https://www.discogs.com/release/27935538-Sweet-Trip-You-Will-Never-Know-Why"><img class="album" src="https://i.discogs.com/dH4Y9o390swneNi6D5_C13BCBIBLWCPc7ovi5Hklhc8/rs:fit/g:sm/q:90/h:530/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTk1MDI3/MzUtMTQ4MjQ1NzAw/MS00OTA4LmpwZWc.jpeg"></a>
+    <a href="https://www.discogs.com/release/28675051-%EA%B3%B5%EC%A4%91%EB%8F%84%EB%91%91-Crumbling"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/a/ac/Mid-Air_Thief_Crumbling_Cover.png"></a>
+    <a href="https://www.discogs.com/release/5934-Hoax-Meltdown-Pipe-Dreams"><img class="album" src="https://i.discogs.com/odc7Sun6-kkU4Jk0734EURobA7AmRRTsMbumY0bHgqg/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU5MzQt/MTcxMDM0OTMwNC02/Nzg3LmpwZWc.jpeg"></a>
+    <a href="https://www.discogs.com/release/30764766-Liana-Flores-Flower-of-the-Soul"><img class="album" src="https://upload.wikimedia.org/wikipedia/en/a/a2/Flower_of_the_soul_cover.jpg"></a>
+    <a href="https://www.discogs.com/release/13784027-Starcrost-Starcrost"><img class="album" src="https://i.discogs.com/sDCTvVJHSHj4OHdvFKhq6CGC1WGWLQMCeUpTsWJJfys/rs:fit/g:sm/q:90/h:331/w:369/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTYzOTQw/MDAtMTQxODE0NDY2/My0yMTE5LmpwZWc.jpeg"></a>
+
+    <!-- mrrrow -->
+    <div class="mrrow">
+      <a href="https://www.youtube.com/@sommersalto" target="_blank">
+        <img src="https://projectpokemon.org/images/normal-sprite/purrloin.gif" alt="purrloin">
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>
