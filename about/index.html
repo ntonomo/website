@@ -2,11 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta property="og:title" content="about me - neproh dot com">
-<meta property="og:description" content="meow meow">
-<meta property="og:image" content="https://raw.githubusercontent.com/ntonomo/website/refs/heads/main/purrpic.png">
-<meta property="og:url" content="https://neproh.com">
-<meta property="og:type" content="website">
   <title>about me - neproh dot com</title>
 
   <link rel="icon" href="/favicon.png">
@@ -63,6 +58,25 @@ a {
 a:hover {
   opacity: 0.6;
 }
+
+<audio id="purrloin-audio" src="boaaa.mp3"></audio>
+
+.purrloin {
+  width: 120px;
+  image-rendering: pixelated;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.purrloin:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.purrloin:active {
+  transform: scale(0.95);
+}
+
   </style>
 </head>
 
@@ -81,7 +95,12 @@ in addition to my love of sports (other than white-ass hockey), i love things th
 i'm a very introverted, solitary person for the most part, so while i do interact just fine and dandy with friends, it can be difficult to interact with new people. for this reason, i tend to avoid talking to people i don't know. nothing personal!
   </p>
 
-  <a href="https://discogs.com/user/neproh"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/509.png" alt="Purrloin">
+  <img 
+  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/509.png" 
+  alt="Purrloin"
+  class="purrloin"
+  onclick="let a=document.getElementById('purrloin-audio'); a.currentTime=0; a.play();"
+>
 
   <a href="#" onclick="history.back()" class="back-button">← back</a>
 </body>
