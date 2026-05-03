@@ -9,7 +9,7 @@
   <style>
     body {
       margin: 0;
-min-height: 100vh;
+      min-height: 100vh;
       background: #ffa667;
 
       display: flex;
@@ -50,33 +50,30 @@ min-height: 100vh;
       font-size: 24px;
     }
 
-a {
-  color: white;
-  text-decoration: underline;
-}
+    a {
+      color: white;
+      text-decoration: underline;
+    }
 
-a:hover {
-  opacity: 0.6;
-}
+    a:hover {
+      opacity: 0.6;
+    }
 
-<audio id="boaaa" src="boaaa.mp3"></audio>
+    .purrloin {
+      width: 120px;
+      image-rendering: pixelated;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
 
-.purrloin {
-  width: 120px;
-  image-rendering: pixelated;
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
+    .purrloin:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
 
-.purrloin:hover {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-
-.purrloin:active {
-  transform: scale(0.95);
-}
-
+    .purrloin:active {
+      transform: scale(0.95);
+    }
   </style>
 </head>
 
@@ -84,7 +81,7 @@ a:hover {
   <h1>about</h1>
 
   <p>
-    i'm a college student with way too much free time on my hands. many people know me for making youtube videos, but i do it very sporadically and just about whenever i feel like it. when it comes to things outside of youtube, i tend to <a href="https://discogs.com/user/neproh">collect records</a> and skate, even though i suck at it. i also like cats; just about a healthy amount, i think.<br><br>
+i'm a college student with way too much free time on my hands. many people know me for making youtube videos, but i do it very sporadically and just about whenever i feel like it. when it comes to things outside of youtube, i tend to <a href="https://discogs.com/user/neproh">collect records</a>, even though i suck at it. i also like cats; just about a healthy amount, i think.<br><br>
 
 i was born in washington state and lived there for the first decade of my life before moving to germany, where i spent my developing years. i speak both english and german, and i would consider stuttgart, germany my home. however, lately, i've settled in new jersey to pursue my post-secondary education.<br><br>
 
@@ -95,12 +92,14 @@ in addition to my love of sports (other than white-ass hockey), i love things th
 i'm a very introverted, solitary person for the most part, so while i do interact just fine and dandy with friends, it can be difficult to interact with new people. for this reason, i tend to avoid talking to people i don't know. nothing personal!
   </p>
 
+  <audio id="boaaa" src="boaaa.mp3"></audio>
+
   <img 
-  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/509.png" 
-  alt="Purrloin"
-  class="purrloin"
-  onclick="let a=document.getElementById('boaaa'); a.currentTime=0; a.play();"
->
+    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/509.png" 
+    alt="Purrloin"
+    class="purrloin"
+    onclick="let a=document.getElementById('boaaa'); a.currentTime=0; a.play();"
+  >
 
   <a href="#" onclick="history.back()" class="back-button">← back</a>
 </body>
