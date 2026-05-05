@@ -3,11 +3,11 @@
 <head>
 <meta property="og:title" content="neproh dot com">
 <meta property="og:description" content="meow meow">
-<meta property="og:image" content="https://raw.githubusercontent.com/ntonomo/website/refs/heads/main/purrpic.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ntonomo/website/refs/heads/main/favicon.png">
 <meta property="og:url" content="https://neproh.com">
 <meta property="og:type" content="website">
   <link rel="icon" href="/favicon.png">
-  <title>neproh dot com</title>
+  <title>neproh</title>
   <style>
     body {
       margin: 0;
@@ -52,17 +52,83 @@ a:hover {
   opacity: 0.6;
 }
 
+#ticker-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent;
+  color: white;
+  padding: 6px 0;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1000;
+  opacity: 0.85;
+}
+
+
+.ticker-text {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-left: 100%;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.ticker-logo {
+  height: 16px;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+#ticker-toggle {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  color: white;
+  border: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+#ticker-toggle:hover {
+  opacity: 0.8;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translate(-100%); }
+}
+#ticker-toggle:hover { opacity: 1; }
+
   </style>
 </head>
 
 <body>
+<button id="ticker-toggle" onclick="toggleTicker()">sports</button>
+
+<div id="ticker-container">
+  <div class="ticker-text">
+    SEAHAWKS: 0-0 • MARINERS: 0-0 • SONICS: STILL GONE :( • KRAKEN: 0-0
+  </div>
+</div>
+
   <div>
     <a href="https://neproh.com/about">about me</a>
     <a href="https://neproh.com/socials">socials</a>
     <a href="https://neproh.com/wall">the wall</a>
   </div>
 
-  <div class="sprites">
+<div class="sprites">
     <a href="https://www.youtube.com/watch?v=booVFGlfguA" target="_blank">
       <img src="https://projectpokemon.org/images/normal-sprite/leafeon.gif" alt="leafeon">
     </a>
@@ -83,5 +149,152 @@ a:hover {
       <img src="https://projectpokemon.org/images/normal-sprite/purrloin.gif" alt="purrloin">
     </a>
   </div>
+
+<script>
+if (Math.floor(Math.random() * 25) === 8) {
+  const pokes = document.querySelectorAll('.sprites img');
+  const shinyLinks = [
+    "https://www.youtube.com/watch?v=hqKs1pDZoXI", "https://www.youtube.com/watch?v=RBECoE7dxiU",
+    "https://www.youtube.com/watch?v=f4-Qz0TWEH8", "https://www.youtube.com/watch?v=HA1YdQ00mzU",
+    "https://www.youtube.com/watch?v=WN9o4_ukFhU"
+  ];
+  pokes.forEach((img, index) => {
+    img.src = img.src.replace('normal-sprite', 'shiny-sprite');
+    img.style.filter = "drop-shadow(0 0 10px rgba(255, 255, 255, 0.8))";
+    img.parentElement.href = shinyLinks[index];
+  });
+}
+
+function toggleTicker() {
+  const ticker = document.getElementById('ticker-container');
+  const button = document.getElementById('ticker-toggle');
+
+  const isHidden = (ticker.style.display === 'none' || ticker.style.display === '');
+
+  if (isHidden) {
+    ticker.style.display = 'block';
+    button.style.display = 'none';
+  } 
+}
+
+async function fetchSports() {
+  const tickerText = document.querySelector('.ticker-text');
+  
+  const teams = [
+    { name: 'MARINERS', url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/12/schedule', id: '12', fallbackLogo: 'https://a.espncdn.com/i/teamlogos/mlb/500/sea.png' },
+    { name: 'SEAHAWKS', url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/26/schedule', id: '26', fallbackLogo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sea.png' },
+    { name: 'KRAKEN', url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams/124292/schedule', id: '124292', fallbackLogo: 'https://a.espncdn.com/i/teamlogos/nhl/500/sea.png' }
+  ];
+
+  tickerText.innerHTML = ''; 
+
+  const getLatestGame = (events) => {
+    if (!events || events.length === 0) return null;
+    return events.slice().reverse().find(e => {
+        const statusObj = e.status || e.competitions[0].status;
+        const state = statusObj.type.state;
+        return state === 'in' || state === 'post';
+    });
+  };
+
+  for (const team of teams) {
+    try {
+      const fetchTeamGames = async (year) => {
+          const yearParam = year ? `season=${year}&` : '';
+          try {
+              const [regRes, postRes] = await Promise.all([
+                  fetch(`${team.url}?${yearParam}seasontype=2`),
+                  fetch(`${team.url}?${yearParam}seasontype=3`)
+              ]);
+              let events = [];
+              if (regRes.ok) { const d = await regRes.json(); if (d.events) events.push(...d.events); }
+              if (postRes.ok) { const d = await postRes.json(); if (d.events) events.push(...d.events); }
+              
+              return events.sort((a, b) => new Date(a.date) - new Date(b.date));
+          } catch (e) {
+              return [];
+          }
+      };
+
+      let allEvents = await fetchTeamGames();
+      let game = getLatestGame(allEvents);
+
+      if (!game) {
+          const prevYear = new Date().getFullYear() - 1;
+          allEvents = await fetchTeamGames(prevYear);
+          game = getLatestGame(allEvents);
+      }
+
+      const teamSpan = document.createElement('span');
+      
+      if (game) {
+        const info = game.competitions[0];
+        const statusObj = game.status || info.status;
+        const status = statusObj.type.shortDetail;
+        
+        const home = info.competitors.find(c => c.homeAway === 'home') || info.competitors[0];
+        const away = info.competitors.find(c => c.homeAway === 'away') || info.competitors[1];
+        
+        const getScore = (c) => c.score ? (c.score.value !== undefined ? c.score.value : c.score) : '0';
+        const homeScore = getScore(home);
+        const awayScore = getScore(away);
+        
+        const myTeam = info.competitors.find(c => parseInt(c.team.id) === parseInt(team.id));
+        let logoUrl = team.fallbackLogo;
+        if (myTeam && myTeam.team) {
+            if (myTeam.team.logo) logoUrl = myTeam.team.logo;
+            else if (myTeam.team.logos && myTeam.team.logos.length > 0) logoUrl = myTeam.team.logos[0].href;
+        }
+
+        let displayString = `${team.name}: ${away.team.abbreviation} ${awayScore} @ ${home.team.abbreviation} ${homeScore} (${status})`;
+        
+        if (team.name === 'SEAHAWKS' && statusObj.type.state === 'post') {
+            const gameDate = new Date(game.date);
+            const month = gameDate.getMonth() + 1; 
+            const day = gameDate.getDate();
+            
+            const myIsHome = parseInt(home.team.id) === parseInt(team.id);
+            const hScoreInt = parseInt(homeScore, 10);
+            const aScoreInt = parseInt(awayScore, 10);
+            
+            let won = false;
+            if (myIsHome && hScoreInt > aScoreInt) won = true;
+            if (!myIsHome && aScoreInt > hScoreInt) won = true;
+            
+            if (won && month === 2 && day >= 4 && day <= 28) {
+                displayString += ' (SUPER BOWL CHAMPS!)';
+            }
+        }
+
+        teamSpan.innerHTML = `<img src="${logoUrl}" class="ticker-logo"> ${displayString}`;
+      } else {
+        teamSpan.innerHTML = `<img src="${team.fallbackLogo}" class="ticker-logo"> ${team.name}: NO RECENT GAMES`;
+      }
+      
+      tickerText.appendChild(teamSpan);
+      
+      const separator = document.createElement('span');
+      separator.innerText = ' • ';
+      tickerText.appendChild(separator);
+
+    } catch (e) {
+      console.error("Sports API Error:", e);
+      const errorSpan = document.createElement('span');
+      errorSpan.innerText = `${team.name}: DATA ERROR • `;
+      tickerText.appendChild(errorSpan);
+    }
+  }
+  
+  const sonics = document.createElement('span');
+  const sonicsLogo = "https://upload.wikimedia.org/wikipedia/en/a/a4/Seattle_SuperSonics_logo.svg";
+  sonics.innerHTML = `<img src="${sonicsLogo}" class="ticker-logo"> SUPERSONICS: STILL GONE :'(`;
+  tickerText.appendChild(sonics);
+}
+
+// meowwww
+fetchSports();
+setInterval(fetchSports, 120000);
+
+</script>
 </body>
 </html>
