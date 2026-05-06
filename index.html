@@ -195,10 +195,17 @@ async function fetchSports() {
 
   const getLatestGame = (events) => {
     if (!events || events.length === 0) return null;
+
+    const liveGame = events.find(e => {
+      const statusObj = e.status || e.competitions[0].status;
+      return statusObj.type.state === 'in';
+    });
+
+    if (liveGame) return liveGame;
+
     return events.slice().reverse().find(e => {
-        const statusObj = e.status || e.competitions[0].status;
-        const state = statusObj.type.state;
-        return state === 'in' || state === 'post';
+      const statusObj = e.status || e.competitions[0].status;
+      return statusObj.type.state === 'post';
     });
   };
 
@@ -240,9 +247,44 @@ async function fetchSports() {
         const home = info.competitors.find(c => c.homeAway === 'home') || info.competitors[0];
         const away = info.competitors.find(c => c.homeAway === 'away') || info.competitors[1];
         
-        const getScore = (c) => c.score ? (c.score.value !== undefined ? c.score.value : c.score) : '0';
-        const homeScore = getScore(home);
-        const awayScore = getScore(away);
+        const getScore = (c) => {
+          if (c.score === undefined || c.score === null) return '0';
+          if (typeof c.score === 'object' && c.score.value !== undefined) {
+            return c.score.value;
+          }
+
+          return c.score;
+        };
+
+let homeScore = getScore(home);
+let awayScore = getScore(away);
+
+if (statusObj.type.state === 'in') {
+  try {
+    const summaryRes = await fetch(
+      `https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event=${game.id}`
+    );
+
+    if (summaryRes.ok) {
+      const summaryData = await summaryRes.json();
+
+      const liveComp = summaryData.header.competitions[0];
+
+      const liveHome = liveComp.competitors.find(
+        c => c.homeAway === 'home'
+      );
+
+      const liveAway = liveComp.competitors.find(
+        c => c.homeAway === 'away'
+      );
+
+      homeScore = getScore(liveHome);
+      awayScore = getScore(liveAway);
+    }
+  } catch (e) {
+    console.error("Live MLB score fetch failed:", e);
+  }
+}
         
         const myTeam = info.competitors.find(c => parseInt(c.team.id) === parseInt(team.id));
         let logoUrl = team.fallbackLogo;
@@ -251,7 +293,7 @@ async function fetchSports() {
             else if (myTeam.team.logos && myTeam.team.logos.length > 0) logoUrl = myTeam.team.logos[0].href;
         }
 
-        let displayString = `${team.name}: ${away.team.abbreviation} ${awayScore} @ ${home.team.abbreviation} ${homeScore} (${status})`;
+        let displayString = `${team.name}: ${away.team.abbreviation} ${awayScore} @ ${home.team.abbreviation} ${homeScore} (${status})`.toLowerCase();
         
         if (team.name === 'SEAHAWKS' && statusObj.type.state === 'post') {
             const gameDate = new Date(game.date);
@@ -267,13 +309,13 @@ async function fetchSports() {
             if (!myIsHome && aScoreInt > hScoreInt) won = true;
             
             if (won && month === 2 && day >= 4 && day <= 28) {
-                displayString += ' (SUPER BOWL CHAMPS!)';
+                displayString += ' (super bowl champs!)';
             }
         }
 
         teamSpan.innerHTML = `<img src="${logoUrl}" class="ticker-logo"> ${displayString}`;
       } else {
-        teamSpan.innerHTML = `<img src="${team.fallbackLogo}" class="ticker-logo"> ${team.name}: NO RECENT GAMES`;
+        teamSpan.innerHTML = `<img src="${team.fallbackLogo}" class="ticker-logo"> ${team.name.toLowerCase()}: no recent games`;
       }
       
       tickerText.appendChild(teamSpan);
@@ -283,16 +325,16 @@ async function fetchSports() {
       tickerText.appendChild(separator);
 
     } catch (e) {
-      console.error("Sports API Error:", e);
+      console.error("sports api error:", e);
       const errorSpan = document.createElement('span');
-      errorSpan.innerText = `${team.name}: DATA ERROR • `;
+      errorSpan.innerText = `${team.name.toLowerCase()}: data error • `;
       tickerText.appendChild(errorSpan);
     }
   }
   
   const sonics = document.createElement('span');
   const sonicsLogo = "https://upload.wikimedia.org/wikipedia/en/a/a4/Seattle_SuperSonics_logo.svg";
-  sonics.innerHTML = `<img src="${sonicsLogo}" class="ticker-logo"> SUPERSONICS: STILL GONE :'(`;
+  sonics.innerHTML = `<img src="${sonicsLogo}" class="ticker-logo"> supersonics: still gone :'(`;
   tickerText.appendChild(sonics);
 }
 
