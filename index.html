@@ -6,12 +6,13 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/ntonomo/website/refs/heads/main/favicon.png">
 <meta property="og:url" content="https://neproh.com">
 <meta property="og:type" content="website">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="/favicon.png">
   <title>neproh</title>
   <style>
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       background: #ffa667;
       display: flex;
       justify-content: center;
@@ -19,15 +20,19 @@
       font-family: Helvetica, Arial, sans-serif;
       font-weight: bold;
       font-style: italic;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      font-size: 48px;
-      line-height: 1.8;
-    }
+  display: block;
+  color: white;
+  text-decoration: none;
+  font-size: clamp(28px, 6vw, 48px);
+  line-height: 1.8;
+  text-align: center;
+  word-break: break-word;
+}
 
     .sprites {
       position: fixed;
