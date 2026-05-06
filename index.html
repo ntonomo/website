@@ -115,7 +115,109 @@ a:hover {
 }
 #ticker-toggle:hover { opacity: 1; }
 
-  </style>
+#now-playing {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+
+width: min(48vw, 340px);
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: white;
+  opacity: 0.72;
+
+  font-size: 13px;
+  text-transform: lowercase;
+}
+
+#now-playing:hover {
+  opacity: 0.95;
+}
+
+#now-playing a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: white;
+  text-decoration: none;
+
+  width: 100%;
+  min-width: 0;
+}
+
+#now-playing img {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.np-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.np-marquee {
+  flex: 1;
+  min-width: 0;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  padding: 0 12px;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+}
+
+.np-track {
+  display: flex;
+  width: max-content;
+
+  animation: np-scroll 20s linear infinite;
+}
+
+.np-segment {
+  flex-shrink: 0;
+
+  padding-right: 56px;
+
+  font-size: 23px;
+  line-height: 1;
+
+  font-weight: bold;
+  font-style: italic;
+
+  font-family: Helvetica, Arial, sans-serif;
+}
+@keyframes np-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}  </style>
 </head>
 
 <body>
@@ -153,7 +255,10 @@ a:hover {
     <a href="https://fmhy.net" target="_blank">
       <img src="https://projectpokemon.org/images/normal-sprite/purrloin.gif" alt="purrloin">
     </a>
+
   </div>
+
+<div id="now-playing"></div>
 
 <script>
 if (Math.floor(Math.random() * 25) === 8) {
@@ -282,7 +387,7 @@ if (statusObj.type.state === 'in') {
       awayScore = getScore(liveAway);
     }
   } catch (e) {
-    console.error("Live MLB score fetch failed:", e);
+    console.error("live mlb score fetch failed:", e);
   }
 }
         
@@ -341,6 +446,73 @@ if (statusObj.type.state === 'in') {
 // meowwww
 fetchSports();
 setInterval(fetchSports, 120000);
+
+async function fetchNowPlaying() {
+  const container = document.getElementById('now-playing');
+
+  try {
+    const user = 'sommersalto';
+    const apiKey = 'cb300682127c8c99fa94b541fc6957ad';
+
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&api_key=${apiKey}&format=json&limit=1`
+    );
+
+    const data = await res.json();
+
+    const tracks = data?.recenttracks?.track;
+const track = Array.isArray(tracks) ? tracks[0] : tracks;
+
+    if (!track) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const isNowPlaying =
+      track['@attr']?.nowplaying === 'true';
+
+    if (!isNowPlaying) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const song = track.name;
+    const artist = track.artist['#text'];
+
+    const cover =
+      track.image.find(img => img.size === 'medium')?.['#text'] ||
+      track.image.find(img => img.size === 'large')?.['#text'] ||
+      '';
+
+    const trackUrl = track.url || '#';
+
+const text =
+  `${song.toLowerCase()} — ${artist.toLowerCase()}`;
+
+container.innerHTML = `
+  <a href="${trackUrl}" target="_blank">
+
+    ${cover ? `<img src="${cover}" alt="album cover">` : ''}
+
+    <span class="np-icon">♬</span>
+
+    <div class="np-marquee">
+      <div class="np-track">
+        <span class="np-segment">${text}</span>
+        <span class="np-segment">${text}</span>
+      </div>
+    </div>
+
+  </a>
+`;
+  } catch (err) {
+    console.error('lastfm error:', err);
+    container.innerHTML = '';
+  }
+}
+
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 15000);
 
 </script>
 </body>
